@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import { ColumnDef } from "@tanstack/react-table";
 import Image from "next/image";
@@ -14,7 +14,7 @@ export const columns: ColumnDef<Appointment>[] = [
   {
     header: "#",
     cell: ({ row }) => {
-      return <p className="text-14-medium ">{row.index + 1}</p>;
+      return <p className="text-14-medium">{row.index + 1}</p>;
     },
   },
   {
@@ -22,7 +22,9 @@ export const columns: ColumnDef<Appointment>[] = [
     header: "Patient",
     cell: ({ row }) => {
       const appointment = row.original;
-      return <p className="text-14-medium ">{appointment.patient.name}</p>;
+      // Safely access patient information
+      const patientName = appointment.patient?.name || "Unknown Patient";
+      return <p className="text-14-medium">{patientName}</p>;
     },
   },
   {
@@ -44,7 +46,7 @@ export const columns: ColumnDef<Appointment>[] = [
       const appointment = row.original;
       return (
         <p className="text-14-regular min-w-[100px]">
-          {formatDateTime(appointment.schedule).dateTime}
+          {appointment.schedule ? formatDateTime(appointment.schedule).dateTime : "No Date Available"}
         </p>
       );
     },
@@ -54,19 +56,16 @@ export const columns: ColumnDef<Appointment>[] = [
     header: "Doctor",
     cell: ({ row }) => {
       const appointment = row.original;
-
-      // Safely find the doctor
       const doctor = Doctors.find(
         (doctor) => doctor.name === appointment.primaryPhysician
       );
 
-      // Handle the case where doctor is undefined
       return (
         <div className="flex items-center gap-3">
           {doctor ? (
             <>
               <Image
-                src={doctor.image ?? "/default-doctor-image.jpg"} // Use a default image if `doctor.image` is undefined
+                src={doctor.image ?? "/default-doctor-image.jpg"}
                 alt={doctor.name}
                 width={100}
                 height={100}
@@ -75,7 +74,7 @@ export const columns: ColumnDef<Appointment>[] = [
               <p className="whitespace-nowrap">Dr. {doctor.name}</p>
             </>
           ) : (
-            <p>Doctor not found</p> // Handle the case where doctor is not found
+            <p>Doctor not found</p>
           )}
         </div>
       );
@@ -90,7 +89,7 @@ export const columns: ColumnDef<Appointment>[] = [
       return (
         <div className="flex gap-1">
           <AppointmentModal
-            patientId={appointment.patient.$id}
+            patientId={appointment.patient?.$id || ""}
             userId={appointment.userId}
             appointment={appointment}
             type="schedule"
@@ -98,7 +97,7 @@ export const columns: ColumnDef<Appointment>[] = [
             description="Please confirm the following details to schedule."
           />
           <AppointmentModal
-            patientId={appointment.patient.$id}
+            patientId={appointment.patient?.$id || ""}
             userId={appointment.userId}
             appointment={appointment}
             type="cancel"

@@ -32,6 +32,7 @@ export const IdentificationTypes = [
   "Medical Insurance Card/Policy",
   "Military ID Card",
   "National Identity Card",
+  "Adhare Card",
   "Passport",
   "Resident Alien Card (Green Card)",
   "Social Security Card",
@@ -80,7 +81,7 @@ export const Doctors = [
 ];
 
 export const StatusIcon = {
-  scheduled: "/assets/icons/check.svg",
+  schedule: "/assets/icons/check.svg",
   pending: "/assets/icons/pending.svg",
   cancelled: "/assets/icons/cancelled.svg",
 };

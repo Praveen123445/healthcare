@@ -40,23 +40,21 @@ export const AppointmentForm = ({
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: appointment?.primaryPhysician || "",
-      schedule: appointment?.schedule ? new Date(appointment.schedule) : new Date(),
-      reason: appointment?.reason || "",
+      primaryPhysician: appointment ? appointment.primaryPhysician : "",
+      schedule: appointment ? new Date(appointment?.schedule) : new Date(Date.now()),
+      reason: appointment? appointment.reason :"",
       note: appointment?.note || "",
       cancellationReason: appointment?.cancellationReason || "",
     },
   });
 
-  const onSubmit = async (
-    values: z.infer<typeof AppointmentFormValidation>
-  ) => {
+  async function onSubmit(values: z.infer<typeof AppointmentFormValidation>) {
     setIsLoading(true);
 
     let status: Status;
     switch (type) {
       case "schedule":
-        status = "scheduled";
+        status = "schedule";
         break;
       case "cancel":
         status = "cancelled";
@@ -67,7 +65,7 @@ export const AppointmentForm = ({
 
     try {
       if (type === "create" && patientId) {
-        const appointmentToCreate = {
+        const appointmentData = {
           userId,
           patient: patientId,
           primaryPhysician: values.primaryPhysician,
@@ -77,18 +75,18 @@ export const AppointmentForm = ({
           note: values.note || "", // Ensure default value
         };
 
-        const newAppointment = await createAppointment(appointmentToCreate);
+        const appointment = await createAppointment(appointmentData);
 
-        if (newAppointment) {
+        if (appointment) {
           form.reset();
           router.push(
-            `/patients/${userId}/new-appointment/success?appointmentId=${newAppointment.$id}`
+            `/patients/${userId}/new-appointment/success?appointmentId=${appointment.$id}`
           );
         }
       } else if (appointment) {
         const appointmentToUpdate = {
           userId,
-          appointmentId: appointment.$id,
+          appointmentId: appointment?.$id,
           appointment: {
             primaryPhysician: values.primaryPhysician,
             schedule: new Date(values.schedule),
