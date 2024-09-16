@@ -5,7 +5,7 @@ import { BUCKET_ID, DATABASE_ID, databases, ENDPOINT, PATIENT_COLLECTION_ID, PRO
 import { parseStringify } from "../utils"
 import { InputFile } from "node-appwrite/file"
 
-export const createuser = async (user: CreateUserParams) => {
+export const createUser = async (user: CreateUserParams) => {
     try {
         const newUser = await users.create(
             ID.unique(), 
@@ -57,7 +57,7 @@ export const  getPatient = async (userId: string) => {
 export const registerPatient = async ({ identificationDocument, ...patient}: RegisterUserParams) => {
     try {
         let file;
-
+        
         if(identificationDocument){
             const inputFile = InputFile.fromBuffer(
                 identificationDocument?.get('blobFile') as Blob,

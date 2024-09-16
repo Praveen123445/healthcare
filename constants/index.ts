@@ -27,7 +27,6 @@ export const PatientFormDefaultValues = {
 };
 
 export const IdentificationTypes = [
-  "Adhare Card",
   "Birth Certificate",
   "Driver's License",
   "Medical Insurance Card/Policy",
@@ -36,6 +35,7 @@ export const IdentificationTypes = [
   "Passport",
   "Resident Alien Card (Green Card)",
   "Social Security Card",
+  "State ID Card",
   "Student ID Card",
   "Voter ID Card",
 ];
